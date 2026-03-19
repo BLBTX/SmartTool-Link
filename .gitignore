@@ -1,0 +1,23 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# Build outputs
+build/
+build-*/
+cmake-build-*/
+
+# Runtime artifacts
+data/runtime/
+
+# Local runtime configs
+config/app/app.json
+config/mqtt/mqtt.json
+config/database/database.json
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

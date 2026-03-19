@@ -1,0 +1,16 @@
+{
+  "driver": "sqlite",
+  "write_targets": [
+    "sqlite"
+  ],
+  "sqlite": {
+    "path": "data/runtime/smarttool_link.db"
+  },
+  "mysql": {
+    "host": "127.0.0.1",
+    "port": 3306,
+    "database": "smarttool_link",
+    "user": "root",
+    "password": "change-me"
+  }
+}

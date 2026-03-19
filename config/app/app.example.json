@@ -1,0 +1,131 @@
+{
+  "device_id": "tool-001",
+  "publish_count": 3,
+  "sample_interval_ms": 1000,
+  "dashboard_refresh_ms": 5000,
+  "simulation_defaults": {
+    "burst_samples": 2,
+    "continuous_samples": 8,
+    "continuous_cadence_seconds": 10
+  },
+  "simulated_devices": [
+    {
+      "device_id": "tool-001",
+      "device_name": "Assembly Driver A",
+      "location": "Line-1",
+      "status": "active",
+      "base_metrics": {
+        "temperature": 46.0,
+        "vibration": 3.1,
+        "current": 8.6
+      },
+      "variation": {
+        "temperature": 1.6,
+        "vibration": 0.25,
+        "current": 0.4
+      },
+      "phase_offset": 0.0
+    },
+    {
+      "device_id": "tool-014",
+      "device_name": "Torque Driver B",
+      "location": "Line-2",
+      "status": "active",
+      "base_metrics": {
+        "temperature": 58.0,
+        "vibration": 4.2,
+        "current": 10.1
+      },
+      "variation": {
+        "temperature": 3.2,
+        "vibration": 0.45,
+        "current": 0.65
+      },
+      "phase_offset": 1.1
+    },
+    {
+      "device_id": "tool-021",
+      "device_name": "Press Feed Motor",
+      "location": "Cell-7",
+      "status": "watch",
+      "base_metrics": {
+        "temperature": 68.0,
+        "vibration": 5.3,
+        "current": 12.4
+      },
+      "variation": {
+        "temperature": 4.5,
+        "vibration": 0.7,
+        "current": 0.9
+      },
+      "phase_offset": 2.3
+    }
+  ],
+  "anomaly_profiles": {
+    "overheat": {
+      "label": "Overheat",
+      "description": "Push device temperature above the configured thermal threshold.",
+      "multipliers": {
+        "temperature": 1.18,
+        "vibration": 0.82,
+        "current": 0.94
+      },
+      "offsets": {
+        "temperature": 5.0,
+        "vibration": 0.0,
+        "current": 0.2
+      },
+      "status": "warning"
+    },
+    "overload": {
+      "label": "Overload",
+      "description": "Raise electrical current to simulate sustained overload.",
+      "multipliers": {
+        "temperature": 1.02,
+        "vibration": 0.92,
+        "current": 1.22
+      },
+      "offsets": {
+        "temperature": 2.0,
+        "vibration": 0.15,
+        "current": 1.4
+      },
+      "status": "warning"
+    },
+    "vibration_spike": {
+      "label": "Vibration Spike",
+      "description": "Increase vibration sharply to mimic alignment or bearing faults.",
+      "multipliers": {
+        "temperature": 0.92,
+        "vibration": 1.28,
+        "current": 0.9
+      },
+      "offsets": {
+        "temperature": 0.8,
+        "vibration": 0.9,
+        "current": 0.0
+      },
+      "status": "warning"
+    },
+    "power_surge": {
+      "label": "Power Surge",
+      "description": "Create a sustained current surge with heat rise for longer-duration demos.",
+      "multipliers": {
+        "temperature": 1.1,
+        "vibration": 0.98,
+        "current": 1.3
+      },
+      "offsets": {
+        "temperature": 3.5,
+        "vibration": 0.2,
+        "current": 1.8
+      },
+      "status": "warning"
+    }
+  },
+  "thresholds": {
+    "temperature": 65.0,
+    "vibration": 5.0,
+    "current": 12.0
+  }
+}

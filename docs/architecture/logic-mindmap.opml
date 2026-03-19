@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<opml version="2.0">
+<head>
+<title>SmartTool-Link 核心模块调用逻辑</title>
+</head>
+<body>
+<outline text="SmartTool-Link 核心模块调用逻辑">
+<outline text="启动入口">
+<outline text="C++ Gateway 入口">
+<outline text="src/main.cpp"/>
+<outline text="load_runtime_settings"/>
+<outline text="创建 MqttPublisher"/>
+<outline text="connect 到 Broker"/>
+<outline text="创建设备模拟器 DeviceSimulator"/>
+<outline text="bootstrap_default_sensors"/>
+<outline text="循环 publish_once"/>
+</outline>
+<outline text="Python Processor 入口">
+<outline text="app/processor/main.py"/>
+<outline text="解析 CLI 参数"/>
+<outline text="sample 模式">
+<outline text="build_sample_payloads"/>
+<outline text="process_payload"/>
+<outline text="persist_telemetry"/>
+</outline>
+<outline text="mqtt 模式">
+<outline text="load_mqtt_library"/>
+<outline text="create_mqtt_client"/>
+<outline text="subscribe topic"/>
+<outline text="on_message"/>
+<outline text="process_payload"/>
+<outline text="persist_telemetry"/>
+</outline>
+</outline>
+<outline text="Dashboard 入口">
+<outline text="app/dashboard/main.py"/>
+<outline text="加载 latest telemetry"/>
+<outline text="加载 history alerts maintenance fleet overview"/>
+<outline text="读取 sidebar 控件"/>
+<outline text="render_dashboard_body"/>
+</outline>
+</outline>
+<outline text="C++ 边缘采集链路">
+<outline text="RuntimeSettings">
+<outline text="读取 config/app"/>
+<outline text="读取 config/mqtt"/>
+<outline text="输出 device_id broker_uri topic qos publish_count"/>
+</outline>
+<outline text="DeviceSimulator">
+<outline text="bootstrap_default_sensors">
+<outline text="TemperatureSensor"/>
+<outline text="VibrationSensor"/>
+<outline text="CurrentSensor"/>
+</outline>
+<outline text="sample">
+<outline text="遍历 BaseSensor 子类"/>
+<outline text="采集 metrics"/>
+<outline text="生成 timestamp"/>
+<outline text="组装 TelemetryMessage"/>
+</outline>
+<outline text="publish_once">
+<outline text="TelemetryMessage.to_json"/>
+<outline text="MqttPublisher.publish"/>
+</outline>
+</outline>
+<outline text="TelemetryMessage">
+<outline text="nlohmann_json 序列化"/>
+<outline text="输出 device_id tick timestamp metrics"/>
+</outline>
+<outline text="MqttPublisher">
+<outline text="Paho 原生路径">
+<outline text="mqtt::client.connect"/>
+<outline text="mqtt::make_message"/>
+<outline text="publish"/>
+</outline>
+<outline text="CLI fallback 路径">
+<outline text="mosquitto_pub"/>
+<outline text="写临时 payload 文件"/>
+<outline text="调用 broker topic qos"/>
+</outline>
+</outline>
+</outline>
+<outline text="Python 处理链路">
+<outline text="process_payload">
+<outline text="persist_telemetry"/>
+<outline text="打印处理结果"/>
+</outline>
+<outline text="Simulator 模块">
+<outline text="list_device_profiles"/>
+<outline text="list_anomaly_profiles"/>
+<outline text="build_sample_payloads">
+<outline text="读取 simulated_devices"/>
+<outline text="读取 anomaly_profiles"/>
+<outline text="生成 metrics"/>
+<outline text="calculate_health_score"/>
+</outline>
+<outline text="inject_simulated_payloads">
+<outline text="Burst 模式"/>
+<outline text="Continuous fault 模式"/>
+</outline>
+</outline>
+<outline text="MQTT 订阅处理">
+<outline text="on_connect">
+<outline text="subscribe telemetry topic"/>
+</outline>
+<outline text="on_message">
+<outline text="json.loads"/>
+<outline text="process_payload"/>
+<outline text="达到 max_messages 后结束"/>
+</outline>
+</outline>
+</outline>
+<outline text="存储链路">
+<outline text="sqlite_store">
+<outline text="load_app_config"/>
+<outline text="load_database_config"/>
+<outline text="load_thresholds"/>
+<outline text="normalize_telemetry">
+<outline text="统一 metrics"/>
+<outline text="calculate_health_score"/>
+<outline text="生成 anomaly_flag"/>
+</outline>
+<outline text="persist_sqlite_telemetry">
+<outline text="upsert devices"/>
+<outline text="insert telemetry"/>
+<outline text="insert device_heartbeats"/>
+<outline text="维护 device status"/>
+</outline>
+<outline text="persist_telemetry">
+<outline text="SQLite 必写"/>
+<outline text="MySQL 可选双写"/>
+<outline text="save_latest_snapshot"/>
+</outline>
+</outline>
+<outline text="mysql_store">
+<outline text="mysql_write_enabled"/>
+<outline text="persist_mysql_telemetry"/>
+<outline text="调用存储过程或 fallback insert"/>
+</outline>
+<outline text="数据表">
+<outline text="devices"/>
+<outline text="telemetry"/>
+<outline text="device_heartbeats"/>
+<outline text="maintenance_logs"/>
+</outline>
+</outline>
+<outline text="告警与维护链路">
+<outline text="告警识别">
+<outline text="阈值超限"/>
+<outline text="health_score 低于 70"/>
+<outline text="anomaly_flag 置位"/>
+</outline>
+<outline text="Alert 查询">
+<outline text="fetch_recent_alerts"/>
+<outline text="从 telemetry 取异常记录"/>
+<outline text="结合 maintenance_logs 计算 alert_state">
+<outline text="unacknowledged"/>
+<outline text="acknowledged"/>
+<outline text="maintained"/>
+</outline>
+</outline>
+<outline text="维护操作">
+<outline text="create_maintenance_log">
+<outline text="ACK_ALERT"/>
+<outline text="INSPECTION"/>
+<outline text="MAINTENANCE_COMPLETE"/>
+<outline text="RETURN_TO_SERVICE"/>
+</outline>
+<outline text="更新 devices.status"/>
+<outline text="写入 maintenance_logs"/>
+<outline text="写入 device_heartbeats"/>
+</outline>
+<outline text="Fleet 状态汇总">
+<outline text="fetch_device_overview"/>
+<outline text="聚合 avg_health_score"/>
+<outline text="聚合 anomaly_count"/>
+<outline text="计算 last_maintenance_at"/>
+<outline text="计算 status_since"/>
+</outline>
+</outline>
+<outline text="Dashboard 展示链路">
+<outline text="数据加载">
+<outline text="load_latest_telemetry"/>
+<outline text="load_recent_history"/>
+<outline text="load_alert_frame"/>
+<outline text="load_maintenance_frame"/>
+<outline text="load_device_frame"/>
+</outline>
+<outline text="视图控制">
+<outline text="Monitoring scope">
+<outline text="Fleet Overview"/>
+<outline text="单设备视图"/>
+</outline>
+<outline text="Time window"/>
+<outline text="Auto refresh"/>
+<outline text="Alert filter"/>
+</outline>
+<outline text="Fleet 展示">
+<outline text="summarize_devices_from_history"/>
+<outline text="merge_device_metadata"/>
+<outline text="render_fleet_status_cards"/>
+<outline text="build_device_health_chart"/>
+<outline text="状态徽章"/>
+<outline text="状态时长"/>
+<outline text="单设备下钻"/>
+</outline>
+<outline text="单设备展示">
+<outline text="build_selected_payload"/>
+<outline text="build_metrics_chart"/>
+<outline text="build_history_chart"/>
+<outline text="build_health_gauge"/>
+</outline>
+<outline text="Alert Desk">
+<outline text="按 alert_state 筛选"/>
+<outline text="告警确认表单"/>
+<outline text="写维护记录"/>
+</outline>
+<outline text="Maintenance Log">
+<outline text="展示维护事件"/>
+<outline text="导出 CSV"/>
+</outline>
+<outline text="Simulation Lab">
+<outline text="选择 scenario"/>
+<outline text="选择目标设备"/>
+<outline text="选择 Burst 或 Continuous"/>
+<outline text="注入异常样本"/>
+</outline>
+</outline>
+<outline text="配置与脚本">
+<outline text="config/app">
+<outline text="thresholds"/>
+<outline text="simulated_devices"/>
+<outline text="anomaly_profiles"/>
+</outline>
+<outline text="config/mqtt">
+<outline text="broker_uri"/>
+<outline text="topic_telemetry"/>
+<outline text="client_id"/>
+<outline text="processor_client_id"/>
+</outline>
+<outline text="config/database">
+<outline text="sqlite 路径"/>
+<outline text="mysql 连接"/>
+<outline text="write_targets"/>
+</outline>
+<outline text="scripts">
+<outline text="setup">
+<outline text="init_db.py"/>
+<outline text="init_mysql.py"/>
+</outline>
+<outline text="run">
+<outline text="run_processor.py"/>
+<outline text="run_dashboard.py"/>
+<outline text="start_broker.py"/>
+</outline>
+<outline text="test">
+<outline text="run_mqtt_e2e.py"/>
+<outline text="run_cpp_gateway_e2e.py"/>
+</outline>
+</outline>
+</outline>
+</outline>
+</body>
+</opml>

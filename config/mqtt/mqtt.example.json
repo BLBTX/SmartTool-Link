@@ -1,0 +1,8 @@
+{
+  "broker_uri": "tcp://localhost:1883",
+  "client_id": "smarttool-link-gateway",
+  "processor_client_id": "smarttool-link-processor",
+  "topic_telemetry": "smarttool/devices/telemetry",
+  "qos": 1,
+  "reconnect_interval_seconds": 5
+}

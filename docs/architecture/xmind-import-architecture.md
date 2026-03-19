@@ -1,0 +1,125 @@
+# SmartTool-Link 项目架构
+
+- 项目定位
+  - 工业 IoT 设备监控与分析网关
+  - 目标
+    - 实时遥测采集
+    - 远程传输
+    - 异常检测与告警
+    - 预测性维护
+    - 多设备可视化监控
+- 运行平台
+  - Windows 10/11
+  - Ubuntu 18.04 ~ 22.04
+  - macOS
+- 技术栈
+  - C++14
+  - MQTT / Paho / Mosquitto
+  - Python 3.10
+  - SQLite / MySQL
+  - Streamlit / Plotly
+  - CMake 3.20+
+- 五层架构
+  - 感应层 Sensing
+    - BaseSensor 抽象
+    - 温度传感器
+    - 振动传感器
+    - 电流传感器
+    - 多设备模拟器
+    - 异常注入
+  - 传输层 Transport
+    - C++ Gateway
+    - JSON 序列化
+    - MQTT Publisher
+    - QoS 1 投递
+    - Broker 解耦
+  - 处理层 Processor
+    - Python Processor
+    - 健康评分
+    - 阈值判定
+    - 告警识别
+    - 模拟数据生成
+    - 连续异常注入
+  - 持久层 Storage
+    - SQLite 本地开发
+    - MySQL 扩展能力
+    - telemetry
+    - device_heartbeats
+    - maintenance_logs
+    - 存储过程
+    - 双写支持
+  - 展示层 Visualization
+    - Streamlit Dashboard
+    - Fleet View
+    - 单设备视图
+    - Alert Desk
+    - Maintenance Log
+    - Simulation Lab
+- 核心链路
+  - 设备 / 传感器
+  - C++ 网关采集
+  - MQTT Broker 转发
+  - Python 处理器订阅
+  - 写入 SQLite / MySQL
+  - Dashboard 展示
+- 核心模块目录
+  - src/
+    - device/
+      - core/
+      - sensors/
+      - simulator/
+    - comm/
+      - mqtt/
+      - serializer/
+    - config/
+  - app/
+    - analytics/
+    - processor/
+    - storage/
+    - dashboard/
+  - sql/
+    - schema/
+    - procedures/
+  - config/
+    - app/
+    - mqtt/
+    - database/
+  - scripts/
+    - setup/
+    - run/
+    - test/
+  - docs/
+  - tests/
+  - data/
+- Dashboard 能力
+  - Hero 总览
+  - 健康仪表盘
+  - 实时负载图
+  - Fleet 状态卡片
+  - 单设备下钻
+  - 时间窗口筛选
+  - 自动刷新
+  - 告警状态筛选
+  - CSV 导出
+- 运维闭环
+  - 告警产生
+  - 未确认告警
+  - 告警确认 ACK_ALERT
+  - 巡检 INSPECTION
+  - 维护完成 MAINTENANCE_COMPLETE
+  - 恢复投产 RETURN_TO_SERVICE
+- 模拟演示能力
+  - 正常样本
+  - overheat
+  - overload
+  - vibration_spike
+  - power_surge
+  - Burst 模式
+  - Continuous fault 模式
+- 项目亮点
+  - 端到端闭环
+  - 多平台兼容
+  - 多设备 Fleet 监控
+  - 告警与维护联动
+  - 异常模拟演示
+  - SQLite 到 MySQL 的扩展路径
