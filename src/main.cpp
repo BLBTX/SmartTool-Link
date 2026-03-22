@@ -5,7 +5,8 @@
 #include "config/runtime_settings.h"
 #include "device/simulator/device_simulator.h"
 
-// Bootstraps the local simulator and emits a short telemetry sequence.
+// Entry point for the gateway demo.
+// Loads runtime config, samples simulated sensors, and publishes telemetry.
 int main() {
     try {
         const smarttool::RuntimeSettings settings = smarttool::load_runtime_settings();

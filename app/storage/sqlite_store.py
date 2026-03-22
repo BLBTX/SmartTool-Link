@@ -76,7 +76,11 @@ def initialize_database() -> Path:
 
 
 def normalize_telemetry(payload: Mapping[str, Any]) -> dict[str, Any]:
-    """Normalize inbound telemetry before persistence and visualization."""
+    """Normalize inbound telemetry before persistence and visualization.
+
+    This is where raw readings become business-ready records with thresholds,
+    health score, and anomaly flags applied.
+    """
     raw_metrics = payload.get("metrics", {})
     thresholds = load_thresholds()
     metrics = {
@@ -112,7 +116,11 @@ def save_latest_snapshot(payload: Mapping[str, Any]) -> Path:
 
 
 def persist_sqlite_telemetry(payload: Mapping[str, Any]) -> None:
-    """Store one normalized telemetry event and heartbeat into SQLite."""
+    """Store one normalized telemetry event and heartbeat into SQLite.
+
+    Besides the telemetry row itself, this function also updates device status
+    so the dashboard can render fleet health and current operating state.
+    """
     db_path = initialize_database()
 
     with sqlite3.connect(db_path) as connection:
@@ -190,7 +198,11 @@ def persist_sqlite_telemetry(payload: Mapping[str, Any]) -> None:
 
 
 def persist_telemetry(payload: Mapping[str, Any]) -> dict[str, Any]:
-    """Store one telemetry event into all configured persistence targets."""
+    """Persist one telemetry event into every configured storage target.
+
+    This is the unified write path used by both sample-mode data and live MQTT
+    messages.
+    """
     from .mysql_store import mysql_write_enabled
     from .mysql_store import persist_mysql_telemetry
 
@@ -284,7 +296,7 @@ def fetch_recent_telemetry(limit: int = 20) -> list[dict[str, Any]]:
 
 
 def fetch_device_overview(limit: int = 12) -> list[dict[str, Any]]:
-    """Return fleet-level health and anomaly rollups per device."""
+    """Return fleet-level health, status, and anomaly rollups per device."""
     db_path = initialize_database()
 
     with sqlite3.connect(db_path) as connection:
@@ -374,7 +386,11 @@ def fetch_device_overview(limit: int = 12) -> list[dict[str, Any]]:
 
 
 def fetch_recent_alerts(limit: int = 20) -> list[dict[str, Any]]:
-    """Return recent anomalous telemetry events for the alert panel."""
+    """Return recent anomalous telemetry events for the alert panel.
+
+    The query also derives whether each alert is still open, acknowledged, or
+    already maintained.
+    """
     db_path = initialize_database()
 
     with sqlite3.connect(db_path) as connection:
@@ -430,7 +446,7 @@ def fetch_recent_alerts(limit: int = 20) -> list[dict[str, Any]]:
 
 
 def create_maintenance_log(device_id: str, event_type: str, description: str = "") -> dict[str, Any]:
-    """Store a maintenance or alert acknowledgement event for a device."""
+    """Store a maintenance or acknowledgement event and update device status."""
     db_path = initialize_database()
     status_by_event = {
         "ACK_ALERT": "maintenance_review",

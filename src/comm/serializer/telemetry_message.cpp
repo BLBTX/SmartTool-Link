@@ -10,6 +10,8 @@
 namespace smarttool {
 
 std::string TelemetryMessage::to_json() const {
+    // Convert the in-memory telemetry struct into the JSON payload consumed by
+    // the MQTT transport layer and Python processor.
 #if SMARTTOOL_HAS_NLOHMANN_JSON
     nlohmann::json payload;
     payload["device_id"] = device_id;
@@ -41,6 +43,7 @@ std::string TelemetryMessage::to_json() const {
 }
 
 std::string TelemetryMessage::escape_json(const std::string& value) {
+    // Minimal escaping used by the manual serializer fallback path.
     std::ostringstream stream;
     for (char ch : value) {
         switch (ch) {

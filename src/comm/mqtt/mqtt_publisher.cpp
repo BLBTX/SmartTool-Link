@@ -33,6 +33,8 @@ bool file_exists(const std::string& path) {
 }
 
 BrokerEndpoint parse_broker_uri(const std::string& broker_uri) {
+    // Normalize broker URIs into host/port pairs for both native MQTT and the
+    // CLI fallback publisher.
     std::string address = broker_uri;
     const std::size_t scheme_pos = address.find("://");
     if (scheme_pos != std::string::npos) {
@@ -130,6 +132,8 @@ bool publish_with_mosquitto_cli(
     const std::string& topic,
     int qos,
     const std::string& payload) {
+    // Fallback path for environments where the native Paho dependency is not
+    // available yet but we still want a runnable end-to-end demo.
     const BrokerEndpoint endpoint = parse_broker_uri(broker_uri);
     const std::string payload_file = build_payload_file_path();
 
@@ -211,6 +215,8 @@ MqttPublisher::MqttPublisher(MqttPublisher&& other) noexcept = default;
 MqttPublisher& MqttPublisher::operator=(MqttPublisher&& other) noexcept = default;
 
 void MqttPublisher::connect() {
+    // Establish the publishing path once at startup so the simulator can push
+    // telemetry repeatedly without reconnecting for every sample.
 #if SMARTTOOL_HAS_PAHO_MQTT
     try {
         client_.reset(new MqttClientHandle(broker_uri_, client_id_));
@@ -230,6 +236,7 @@ void MqttPublisher::connect() {
 }
 
 void MqttPublisher::publish(const std::string& payload) {
+    // Publish one JSON telemetry payload through the active MQTT path.
     if (!connected_) {
         throw std::runtime_error("MQTT publisher is not connected.");
     }

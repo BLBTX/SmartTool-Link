@@ -50,7 +50,7 @@ DEFAULT_ANOMALY_PROFILES = {
 
 
 def _load_profiles() -> tuple[list[dict[str, Any]], dict[str, dict[str, Any]]]:
-    """Load simulated device and anomaly profile config with defaults."""
+    """Load device and anomaly definitions that drive the demo scenarios."""
     app_config = load_app_config()
     profiles = app_config.get("simulated_devices", [])
     if not profiles:
@@ -97,7 +97,11 @@ def _build_metrics(
     anomaly_profiles: dict[str, dict[str, Any]],
     intensity_scale: float = 1.0,
 ) -> dict[str, float]:
-    """Build one metric set with optional anomaly shaping."""
+    """Build one synthetic sensor reading set for a chosen scenario.
+
+    Normal mode produces healthy drift, while anomaly modes push metrics above
+    configured thresholds for presentation and alert demos.
+    """
     metrics = {
         "temperature": float(base_metrics.get("temperature", 42.0)) + math.sin(phase) * float(variation.get("temperature", 1.0)),
         "vibration": float(base_metrics.get("vibration", 2.5)) + math.cos(phase * 1.4) * float(variation.get("vibration", 0.2)),
@@ -136,7 +140,7 @@ def build_sample_payloads(
     sample_interval_seconds: int = 1,
     continuous: bool = False,
 ) -> list[dict[str, object]]:
-    """Build sample telemetry for configured devices under a chosen scenario."""
+    """Create demo telemetry payloads for one or more configured devices."""
     thresholds = load_thresholds()
     device_profiles, anomaly_profiles = _load_profiles()
     selected_ids = set(device_ids or [])
@@ -189,7 +193,7 @@ def inject_simulated_payloads(
     sample_interval_seconds: int = 1,
     continuous: bool = False,
 ) -> list[dict[str, Any]]:
-    """Persist one or more simulated payloads for dashboard and alert demos."""
+    """Persist simulated telemetry so the dashboard can show alerts and drills."""
     stored_messages: list[dict[str, Any]] = []
     for payload in build_sample_payloads(
         scenario_name=scenario_name,

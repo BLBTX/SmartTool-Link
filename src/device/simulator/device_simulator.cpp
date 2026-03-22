@@ -16,12 +16,15 @@ DeviceSimulator::DeviceSimulator(std::string device_id, MqttPublisher publisher)
     : device_id_(std::move(device_id)), publisher_(std::move(publisher)), tick_(0) {}
 
 void DeviceSimulator::bootstrap_default_sensors() {
+    // Register the default demo sensors shown in the project presentation.
     sensors_.emplace_back(new TemperatureSensor());
     sensors_.emplace_back(new VibrationSensor());
     sensors_.emplace_back(new CurrentSensor());
 }
 
 TelemetryMessage DeviceSimulator::sample() {
+    // Pull one reading from each sensor and package the result as one
+    // timestamped telemetry message.
     TelemetryMessage message;
     message.device_id = device_id_;
     message.tick = tick_;
@@ -36,11 +39,13 @@ TelemetryMessage DeviceSimulator::sample() {
 }
 
 void DeviceSimulator::publish_once() {
+    // Run the full edge-side cycle once: sample sensors, serialize, publish.
     const TelemetryMessage message = sample();
     publisher_.publish(message.to_json());
 }
 
 std::string DeviceSimulator::make_timestamp() const {
+    // Emit an ISO-8601 UTC timestamp so C++ and Python share one time format.
     const auto now = std::chrono::system_clock::now();
     const std::time_t time_value = std::chrono::system_clock::to_time_t(now);
 

@@ -45,14 +45,18 @@ def parse_broker_uri(broker_uri: str) -> tuple[str, int]:
 
 
 def process_payload(payload: dict[str, Any]) -> dict[str, Any]:
-    """Normalize and store one telemetry payload."""
+    """Run the main backend processing step for one telemetry message.
+
+    This is the handoff point from raw inbound payloads to normalized,
+    scored, and persisted telemetry.
+    """
     stored = persist_telemetry(payload)
     print(json.dumps(stored, indent=2))
     return stored
 
 
 def run_sample_once() -> list[dict[str, Any]]:
-    """Generate and persist one local sample batch."""
+    """Generate a local demo batch and send it through the same storage path."""
     stored_messages = []
     for payload in build_sample_payloads():
         stored_messages.append(process_payload(payload))
@@ -60,7 +64,11 @@ def run_sample_once() -> list[dict[str, Any]]:
 
 
 def run_mqtt_listener(timeout_seconds: int, max_messages: int) -> list[dict[str, Any]]:
-    """Subscribe to MQTT telemetry and persist a bounded number of messages."""
+    """Subscribe to MQTT telemetry and persist a bounded number of messages.
+
+    This function represents the live runtime path used in the end-to-end
+    demo: broker subscription, JSON decoding, and backend persistence.
+    """
     mqtt = load_mqtt_library()
 
     mqtt_config = load_json_config("config/mqtt/mqtt.json", "config/mqtt/mqtt.example.json")
@@ -122,7 +130,7 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def main() -> None:
-    """Run the processor in sample mode or MQTT ingestion mode."""
+    """Start the processor in either demo mode or live MQTT ingestion mode."""
     args = build_parser().parse_args()
 
     if args.mode == "sample":

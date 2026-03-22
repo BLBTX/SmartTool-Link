@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<opml version="2.0">
+<head>
+<title>SmartTool-Link Project Code Files Mind Map (SmartTool-Link 项目代码文件思维导图)</title>
+</head>
+<body>
+<outline text="SmartTool-Link Project Code Files Mind Map (SmartTool-Link 项目代码文件思维导图)">
+<outline text="Root (根目录)">
+<outline text="CMakeLists.txt - C++ gateway build entry (C++ 网关构建入口)"/>
+<outline text="app/requirements.txt - Python dependency list (Python 依赖清单)"/>
+</outline>
+<outline text="src / C++ Edge Collection and MQTT Gateway (src / C++ 边缘采集与 MQTT 网关)">
+<outline text="main.cpp - gateway entrypoint that loads config and publishes telemetry in a loop (网关主入口，读取配置并循环发布遥测)"/>
+<outline text="config / Runtime Settings (config / 运行时配置)">
+<outline text="runtime_settings.h - RuntimeSettings struct definition (RuntimeSettings 结构定义)"/>
+<outline text="runtime_settings.cpp - loads and merges app and MQTT config (读取并合并 app 和 mqtt 配置)"/>
+</outline>
+<outline text="device / Device Simulation and Sensor Layer (device / 设备模拟与传感器层)">
+<outline text="core / Sensor Abstraction (core / 传感器抽象)">
+<outline text="base_sensor.h - base sensor interface (传感器基类接口)"/>
+<outline text="base_sensor.cpp - base sensor implementation (传感器基类实现)"/>
+</outline>
+<outline text="sensors / Concrete Sensors (sensors / 具体传感器实现)">
+<outline text="temperature_sensor.h - temperature sensor declaration (温度传感器声明)"/>
+<outline text="temperature_sensor.cpp - temperature sampling logic (温度采样逻辑)"/>
+<outline text="vibration_sensor.h - vibration sensor declaration (振动传感器声明)"/>
+<outline text="vibration_sensor.cpp - vibration sampling logic (振动采样逻辑)"/>
+<outline text="current_sensor.h - current sensor declaration (电流传感器声明)"/>
+<outline text="current_sensor.cpp - current sampling logic (电流采样逻辑)"/>
+</outline>
+<outline text="simulator / Device Simulator (simulator / 设备模拟器)">
+<outline text="device_simulator.h - simulator interface (模拟器接口)"/>
+<outline text="device_simulator.cpp - assembles sensors, builds TelemetryMessage, and publishes MQTT (组装传感器、生成 TelemetryMessage、发布 MQTT)"/>
+</outline>
+</outline>
+<outline text="comm / Communication Layer (comm / 通信层)">
+<outline text="serializer / Telemetry Serialization (serializer / 遥测序列化)">
+<outline text="telemetry_message.h - telemetry message structure (遥测消息结构)"/>
+<outline text="telemetry_message.cpp - converts TelemetryMessage to JSON (TelemetryMessage 转 JSON)"/>
+</outline>
+<outline text="mqtt / MQTT Publishing (mqtt / MQTT 发布)">
+<outline text="mqtt_publisher.h - MQTT publisher interface (MQTT 发布器接口)"/>
+<outline text="mqtt_publisher.cpp - Paho MQTT and mosquitto_pub fallback publishing implementation (Paho MQTT 与 mosquitto_pub fallback 发布实现)"/>
+</outline>
+</outline>
+</outline>
+<outline text="app / Python Processing and Dashboard (app / Python 处理层与 Dashboard)">
+<outline text="__init__.py - Python package entry (Python 包入口)"/>
+<outline text="analytics / Analytics Module (analytics / 分析模块)">
+<outline text="__init__.py - analytics package init (分析包初始化)"/>
+<outline text="health_score.py - health scoring algorithm (健康评分算法)"/>
+</outline>
+<outline text="processor / Processor Module (processor / 处理器模块)">
+<outline text="__init__.py - processor package init (处理器包初始化)"/>
+<outline text="main.py - sample mode and MQTT mode entrypoint (sample 模式与 MQTT 模式入口)"/>
+<outline text="simulator.py - simulated devices, anomaly scenarios, and continuous fault injection (模拟设备、异常场景和连续异常注入)"/>
+</outline>
+<outline text="storage / Storage Module (storage / 存储模块)">
+<outline text="__init__.py - storage package init (存储包初始化)"/>
+<outline text="sqlite_store.py - config loading, normalization, SQLite persistence, queries, and maintenance logs (配置读取、标准化、SQLite 持久化、查询与维护日志)"/>
+<outline text="mysql_store.py - MySQL dual-write and stored procedure calls (MySQL 双写与存储过程调用)"/>
+</outline>
+<outline text="dashboard / Visualization Layer (dashboard / 展示层)">
+<outline text="__init__.py - dashboard package init (Dashboard 包初始化)"/>
+<outline text="main.py - Streamlit monitoring cockpit, fleet view, alert desk, maintenance log, and simulation lab (Streamlit 监控驾驶舱、Fleet 视图、Alert Desk、Maintenance Log、Simulation Lab)"/>
+</outline>
+</outline>
+<outline text="scripts / Setup, Run, and Test Scripts (scripts / 启动、初始化、测试脚本)">
+<outline text="setup / Environment Setup (setup / 环境初始化)">
+<outline text="quickstart.py - one-click bootstrap and startup orchestration (一键迁移与启动编排)"/>
+<outline text="quickstart.ps1 - one-click startup script for Windows (Windows 一键启动脚本)"/>
+<outline text="quickstart.sh - one-click startup script for Linux and macOS (Linux/macOS 一键启动脚本)"/>
+<outline text="init_db.py - SQLite initialization script (SQLite 初始化脚本)"/>
+<outline text="init_mysql.py - MySQL initialization script (MySQL 初始化脚本)"/>
+</outline>
+<outline text="run / Runtime Entrypoints (run / 运行入口)">
+<outline text="start_broker.py - starts the local Mosquitto broker (启动本地 Mosquitto Broker)"/>
+<outline text="run_processor.py - starts the Python processor (启动 Python 处理器)"/>
+<outline text="run_dashboard.py - starts the Streamlit dashboard (启动 Streamlit Dashboard)"/>
+</outline>
+<outline text="test / End-to-End Validation (test / 端到端验证)">
+<outline text="run_mqtt_e2e.py - validates the Python MQTT publish/subscribe path (Python MQTT 发布/订阅链路验证)"/>
+<outline text="run_cpp_gateway_e2e.py - validates the full C++ Gateway to MQTT to Python to SQLite path (C++ Gateway 到 MQTT 到 Python 到 SQLite 全链路验证)"/>
+</outline>
+</outline>
+<outline text="config / Configuration Files (config / 配置文件)">
+<outline text="app / Application Config (app / 应用配置)">
+<outline text="app.example.json - default device, threshold, simulated device, and anomaly scenario examples (默认设备、阈值、模拟设备、异常场景示例)"/>
+<outline text="app.json - current runtime application config (当前运行时应用配置)"/>
+</outline>
+<outline text="mqtt / MQTT Config (mqtt / MQTT 配置)">
+<outline text="mqtt.example.json - broker, topic, and client ID examples (Broker、Topic、Client ID 示例)"/>
+<outline text="mqtt.json - current runtime MQTT config (当前运行时 MQTT 配置)"/>
+<outline text="mosquitto.conf - local broker config (本地 Broker 配置)"/>
+</outline>
+<outline text="database / Database Config (database / 数据库配置)">
+<outline text="database.example.json - SQLite and MySQL dual-write strategy examples (SQLite/MySQL 双写策略示例)"/>
+<outline text="database.json - current runtime database config (当前运行时数据库配置)"/>
+</outline>
+</outline>
+<outline text="sql / Database Scripts (sql / 数据库脚本)">
+<outline text="schema / Schema Initialization (schema / 表结构初始化)">
+<outline text="init.sql - SQLite schema initialization (SQLite 表结构初始化)"/>
+<outline text="init_mysql.sql - MySQL schema initialization (MySQL 表结构初始化)"/>
+</outline>
+<outline text="procedures / Stored Procedures (procedures / 存储过程)">
+<outline text="telemetry_mysql.sql - MySQL telemetry-related stored procedures (MySQL 遥测相关存储过程)"/>
+</outline>
+</outline>
+<outline text="tests / Test Directory Placeholders (tests / 测试目录占位)">
+<outline text="cpp / C++ test directory (C++ 测试目录)"/>
+<outline text="python / Python test directory (Python 测试目录)"/>
+<outline text="integration / integration test directory (集成测试目录)"/>
+</outline>
+</outline>
+</body>
+</opml>

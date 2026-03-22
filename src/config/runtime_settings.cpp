@@ -10,6 +10,8 @@ namespace smarttool {
 namespace {
 
 std::string resolve_config_path(const std::string& primary, const std::string& fallback) {
+    // Prefer the runtime config, but fall back to the checked-in example so
+    // the project can still run on a fresh machine.
     std::ifstream primary_stream(primary.c_str());
     if (primary_stream.good()) {
         return primary;
@@ -24,6 +26,7 @@ std::string resolve_config_path(const std::string& primary, const std::string& f
 }
 
 nlohmann::json load_json_file(const std::string& primary, const std::string& fallback) {
+    // Shared helper that resolves the effective config file and parses JSON.
     const std::string path = resolve_config_path(primary, fallback);
     std::ifstream stream(path.c_str());
     if (!stream.good()) {
@@ -38,6 +41,8 @@ nlohmann::json load_json_file(const std::string& primary, const std::string& fal
 }  // namespace
 
 RuntimeSettings load_runtime_settings() {
+    // Merge application and MQTT config into one runtime settings object used
+    // by the C++ gateway entrypoint.
     RuntimeSettings settings;
 
     const nlohmann::json app_config = load_json_file(

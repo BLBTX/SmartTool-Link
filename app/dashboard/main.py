@@ -359,7 +359,11 @@ def build_selected_payload(
     history: pd.DataFrame,
     devices: pd.DataFrame,
 ) -> dict[str, object]:
-    """Create the active payload for the selected device or fleet view."""
+    """Create the payload used by the hero cards and top-level charts.
+
+    Fleet scope uses aggregated values, while device scope uses the latest
+    visible sample for the selected device.
+    """
     if selected_device == FLEET_LABEL:
         fallback_health = float(cast(float, fallback_payload["health_score"]))
         fleet_health = float(devices["avg_health_score"].mean()) if not devices.empty else fallback_health
@@ -580,7 +584,7 @@ def build_device_health_chart(devices: pd.DataFrame) -> go.Figure:
 
 
 def render_hero(payload: dict[str, object], history: pd.DataFrame, selected_device: str) -> None:
-    """Render the dashboard hero panel with posture and context."""
+    """Render the top monitoring summary shown first during a demo."""
     payload_score = payload.get("health_score", 0.0)
     payload_anomaly = payload.get("anomaly_flag", 0)
     score = float(cast(float, payload_score))
@@ -613,7 +617,7 @@ def render_hero(payload: dict[str, object], history: pd.DataFrame, selected_devi
 
 
 def main() -> None:
-    """Launch the richer Streamlit dashboard for local monitoring."""
+    """Launch the Streamlit monitoring cockpit and wire up its controls."""
     st.set_page_config(page_title="SmartTool-Link Dashboard", layout="wide")
     apply_dashboard_theme()
 
@@ -741,6 +745,7 @@ def main() -> None:
             )
 
     def render_dashboard_body() -> None:
+        """Render the main dashboard body for the current filter state."""
         latest_payload = load_latest_telemetry()
         history = filter_frame_by_window(load_recent_history(), "timestamp", time_window_hours)
         alerts = filter_alerts_by_state(

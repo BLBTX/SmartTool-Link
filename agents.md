@@ -104,4 +104,9 @@ void DeviceGateway::publish_telemetry(const nlohmann::json& data) {
 33. **增加告警状态筛选能力**：为 Alert Desk 增加全部、未确认、已确认、已维护等筛选项，并根据维护事件对每条告警计算 `alert_state`，便于值守人员区分处理阶段。
 34. **增加一键迁移脚本**：新增 `scripts/setup/quickstart.py` 及 Windows/Linux/macOS 包装脚本，可在新电脑上一键复制配置、创建虚拟环境、安装依赖、初始化数据库、可选构建网关并启动演示栈。
 35. **补充新电脑依赖检查清单**：新增 `docs/setup/new-machine-dependency-checklist.md`，整理 Python、pip、Git、CMake、编译器、Mosquitto、MySQL 的检查项、验证命令和最小可运行条件，便于迁移前预检。
+36. **补充展示用架构文档**：新增 `docs/architecture/project-architecture-mindmap.md`、`docs/architecture/executive-mindmap.md`、`docs/architecture/system-architecture-diagram.md`，用于项目汇报、架构说明和技术展示。
+37. **补充 XMind 导入与调用逻辑脑图**：新增 `docs/architecture/xmind-import-architecture.md` 与 `docs/architecture/core-module-call-logic-mindmap.md`，分别用于 XMind 导入和核心模块调用关系展示。
+38. **补充项目阅读与面试讲解材料**：新增 `docs/architecture/project-reading-guide-bilingual.md` 与 `docs/architecture/interview-presentation-script-bilingual.md`，方便做项目理解、面试讲解和双语展示准备。
+39. **统一仓库 README 命名**：将项目说明统一为 `README.md`，避免 `README.md` 与 `readme.md` 在跨平台 Git 场景下产生命名冲突。
+40. **完成 GitHub 仓库初始化与首次推送**：新增根目录 `.gitignore`、初始化本地 Git 仓库、合并远端初始提交，并成功推送到 `git@github.com:BLBTX/SmartTool-Link.git` 的 `main` 分支。
 
