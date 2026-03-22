@@ -81,6 +81,7 @@ def normalize_telemetry(payload: Mapping[str, Any]) -> dict[str, Any]:
     This is where raw readings become business-ready records with thresholds,
     health score, and anomaly flags applied.
     """
+    # 1 Cleaning & Typing
     raw_metrics = payload.get("metrics", {})
     thresholds = load_thresholds()
     metrics = {
@@ -88,13 +89,13 @@ def normalize_telemetry(payload: Mapping[str, Any]) -> dict[str, Any]:
         "vibration": float(raw_metrics.get("vibration", 0.0)),
         "current": float(raw_metrics.get("current", 0.0)),
     }
-
+    # 2 Logic & Enrichment
     health_score = float(payload.get("health_score", calculate_health_score(metrics, thresholds=thresholds)))
     anomaly_flag = int(
         any(metrics[name] > thresholds[name] for name in thresholds)
         or health_score < 70.0
     )
-
+    # 3 Standardization
     return {
         "device_id": str(payload.get("device_id", "tool-001")),
         "device_name": str(payload.get("device_name", f"Device {payload.get('device_id', 'tool-001')}")),
